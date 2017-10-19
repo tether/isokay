@@ -22,7 +22,7 @@ test('should return empty object if data is not passed', assert => {
 })
 
 
-test('should create object parameter from value', assert => {
+test('should create object parameter from value different than object', assert => {
   assert.plan(2)
   const data = {
     foo: 'bar'
@@ -41,14 +41,14 @@ test('should create object parameter from value', assert => {
 })
 
 
-// test('should generate object parameter', assert => {
-//   assert.plan(1)
-//   const data = {
-//     foo: 'bar'
-//   }
-//   assert.deepEqual(isokay(data, {
-//     hello() {
-//       return 'world'
-//     }
-//   }), data)
-// })
+test('should create object parameter from function', assert => {
+  assert.plan(1)
+  const data = {
+    foo: 'bar'
+  }
+  assert.deepEqual(isokay(data, {
+    hello() {
+      return 'world'
+    }
+  }), data)
+})
