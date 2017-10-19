@@ -51,3 +51,17 @@ test('should create object parameter from function', assert => {
     hello: 'world'
   })
 })
+
+test('should create object parameter from function using existing key', assert => {
+  assert.plan(1)
+  const data = {
+    hello: 'canada'
+  }
+  assert.deepEqual(isokay(data, {
+    hello(value) {
+      return 'hello ' + value
+    }
+  }), {
+    hello: 'hello canada'
+  })
+})
