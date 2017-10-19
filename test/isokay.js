@@ -7,18 +7,28 @@ const test = require('tape')
 const isokay = require('..')
 
 
+test('should return promise', assert => {
+  assert.plan(1)
+  const promise = isokay()
+  assert.equal(typeof promise.then, 'function')
+})
+
 test('should return object is schema not specified', assert => {
   assert.plan(1)
   const data = {
     foo: 'bar'
   }
-  assert.deepEqual(isokay(data), data)
+  isokay(data).then(result => {
+    assert.deepEqual(result, data)
+  })
 })
 
 
 test('should return empty object if data is not passed', assert => {
   assert.plan(1)
-  assert.deepEqual(isokay(), {})
+  isokay().then(result => {
+    assert.deepEqual(result, {})
+  })
 })
 
 
@@ -27,27 +37,34 @@ test('should create object parameter from value different than object', assert =
   const data = {
     foo: 'bar'
   }
-  assert.deepEqual(isokay(data, {
+  isokay(data, {
     hello: 'world'
-  }), {
-    foo: 'bar',
-    hello: 'world'
+  }).then(result => {
+    assert.deepEqual(result, {
+      foo: 'bar',
+      hello: 'world'
+    })
   })
-  assert.deepEqual(isokay(data, {
+
+  isokay(data, {
     foo: 'boop'
-  }), {
-    foo: 'boop'
+  }).then(result => {
+    assert.deepEqual(result, {
+      foo: 'boop'
+    })
   })
 })
 
 test('should create object parameter from schema function', assert => {
   assert.plan(1)
-  assert.deepEqual(isokay(null, {
+  isokay(null, {
     hello() {
       return 'world'
     }
-  }), {
-    hello: 'world'
+  }).then(result => {
+    assert.deepEqual(result, {
+      hello: 'world'
+    })
   })
 })
 
@@ -56,12 +73,14 @@ test('should pass existing value to schema function', assert => {
   const data = {
     hello: 'canada'
   }
-  assert.deepEqual(isokay(data, {
+  isokay(data, {
     hello(value) {
       return 'hello ' + value
     }
-  }), {
-    hello: 'hello canada'
+  }).then(result => {
+    assert.deepEqual(result, {
+      hello: 'hello canada'
+    })
   })
 })
 
@@ -70,11 +89,13 @@ test('should coerce string to number', assert => {
   const data = {
     foo: '2'
   }
-  assert.deepEqual(isokay(data, {
+  isokay(data, {
     foo: {
       type: 'number'
     }
-  }), {
-    foo: 2
+  }).then(result => {
+    assert.deepEqual(result, {
+      foo: 2
+    })
   })
 })
