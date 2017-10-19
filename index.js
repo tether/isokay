@@ -11,18 +11,12 @@ module.exports = function (data, schema = {}) {
     Object.keys(schema).map(key => {
       let value = schema[key]
       const type = typeof value
-      // if (type !== 'object') {
-      //   value = {
-      //     transform : value
-      //   }
-      // }
-      // validate(value, result, key)
-
-      if (type === 'object') {
-        validate(value, result, key)
-      } else if (type === 'function') {
-        result[key] = value(result[key])
-      } else  result[key] = value
+      if (type !== 'object') {
+        value = {
+          transform : value
+        }
+      }
+      validate(value, result, key)
     })
     resolve(result)
   })
