@@ -43,12 +43,11 @@ test('should create object parameter from value different than object', assert =
 
 test('should create object parameter from function', assert => {
   assert.plan(1)
-  const data = {
-    foo: 'bar'
-  }
-  assert.deepEqual(isokay(data, {
+  assert.deepEqual(isokay(null, {
     hello() {
       return 'world'
     }
-  }), data)
+  }), {
+    hello: 'world'
+  })
 })
