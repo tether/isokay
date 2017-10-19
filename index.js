@@ -12,17 +12,32 @@ module.exports = function (data, schema = {}) {
       const value = schema[key]
       const type = typeof value
       if (type === 'object') {
-        if (value['required']) {
-          if (result[key] == null) throw new Error(`field ${key} is missing`)
-        }
-        Object.keys(value).map(validator => {
-          if (validator === 'type') result[key] = coerce(value[validator], key, result[key])
-        })
+        validate(value, result, key)
       } else if (type === 'function') {
         result[key] = value(result[key])
       } else  result[key] = value
     })
     resolve(result)
+  })
+}
+
+
+
+/**
+ * Validate data key/value against passed schema.
+ *
+ * @param {Object} schema
+ * @param {Object} data
+ * @param {String} key
+ * @api private
+ */
+
+function validate (schema, data, key) {
+  if (schema['required']) {
+    if (data[key] == null) throw new Error(`field ${key} is missing`)
+  }
+  Object.keys(schema).map(validator => {
+    if (validator === 'type') data[key] = coerce(schema[validator], key, data[key])
   })
 }
 
