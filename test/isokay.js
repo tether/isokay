@@ -127,3 +127,30 @@ test('should trigger an error if a required field does not exist', assert => {
     assert.equal(err.message, 'field bar is missing')
   })
 })
+
+
+test('should validate value against a function', assert => {
+  assert.plan(2)
+  const data = {
+    length: 10
+  }
+  isokay(data, {
+    length: {
+      validate(value) {
+        return value < 12
+      }
+    }
+  }).then(result => {
+    assert.deepEqual(result, data)
+  })
+
+  isokay(data, {
+    length: {
+      validate(value) {
+        return value > 12
+      }
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'field length can not be validated')
+  })
+})
