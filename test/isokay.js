@@ -154,3 +154,26 @@ test('should validate value against a function', assert => {
     assert.equal(err.message, 'field length can not be validated')
   })
 })
+
+
+test('should transform value', assert => {
+  assert.plan(2)
+  isokay({
+    foo: 'bar'
+  }, {
+    hello: {
+      transform() {
+        return 'world'
+      }
+    },
+    foo: {
+      required: true,
+      transform(val) {
+        return 'hello '+ val
+      }
+    }
+  }).then(result => {
+    assert.equal(result.hello, 'world')
+    assert.equal(result.foo, 'hello bar')
+  })
+})
