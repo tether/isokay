@@ -9,8 +9,15 @@ module.exports = function (data, schema = {}) {
   const result = Object.assign({}, data)
   return new Promise((resolve, reject) => {
     Object.keys(schema).map(key => {
-      const value = schema[key]
+      let value = schema[key]
       const type = typeof value
+      // if (type !== 'object') {
+      //   value = {
+      //     transform : value
+      //   }
+      // }
+      // validate(value, result, key)
+
       if (type === 'object') {
         validate(value, result, key)
       } else if (type === 'function') {
@@ -46,7 +53,10 @@ function validate (schema, data, key) {
       if (!schema[validator](value)) throw new Error(`field ${key} can not be validated`)
     }
     if (validator === 'transform') {
-      data[key] = schema[validator](value)
+      const cb = schema[validator]
+      data[key] = typeof cb === 'function'
+        ? cb(value)
+        : cb
     }
   })
 }

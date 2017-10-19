@@ -156,7 +156,7 @@ test('should validate value against a function', assert => {
 })
 
 
-test('should transform value', assert => {
+test('should transform value with function', assert => {
   assert.plan(2)
   isokay({
     foo: 'bar'
@@ -175,5 +175,18 @@ test('should transform value', assert => {
   }).then(result => {
     assert.equal(result.hello, 'world')
     assert.equal(result.foo, 'hello bar')
+  })
+})
+
+test('should transform value with primitive', assert => {
+  assert.plan(1)
+  isokay({
+    foo: 'bar'
+  }, {
+    foo: {
+      transform: 'boop'
+    }
+  }).then(result => {
+    assert.equal(result.foo, 'boop')
   })
 })
