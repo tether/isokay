@@ -6,5 +6,6 @@
  */
 
 module.exports = function (data, schema) {
-  return data
+  const result = Object.assign({}, data)
+  return result
 }
