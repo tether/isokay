@@ -5,8 +5,6 @@
  * @api public
  */
 
-module.exports = function () {
-  // do something
+module.exports = function (data, schema) {
+  return data
 }
-
-  
