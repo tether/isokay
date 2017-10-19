@@ -99,3 +99,17 @@ test('should coerce string to number', assert => {
     })
   })
 })
+
+test('should trigger error if string can not be converted into a number', assert => {
+  assert.plan(1)
+  const data = {
+    foo: 'what'
+  }
+  isokay(data, {
+    foo: {
+      type: 'number'
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'foo field can not be converted to a number')
+  })
+})
