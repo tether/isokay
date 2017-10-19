@@ -40,7 +40,6 @@ test('should create object parameter from value different than object', assert =
   })
 })
 
-
 test('should create object parameter from schema function', assert => {
   assert.plan(1)
   assert.deepEqual(isokay(null, {
@@ -63,5 +62,19 @@ test('should pass existing value to schema function', assert => {
     }
   }), {
     hello: 'hello canada'
+  })
+})
+
+test('should coerce string to number', assert => {
+  assert.plan(1)
+  const data = {
+    foo: '2'
+  }
+  assert.deepEqual(isokay(data, {
+    foo: {
+      type: 'number'
+    }
+  }), {
+    foo: 2
   })
 })
