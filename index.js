@@ -8,13 +8,13 @@
 module.exports = function (data, schema = {}) {
   const result = Object.assign({}, data)
   Object.keys(schema).map(key => {
-    const value = schema[key]
-    const type = typeof value
+    const validator = schema[key]
+    const type = typeof validator
     if (type === 'object') {
 
     } else if (type === 'function') {
-      result[key] = value()
-    } else  result[key] = value
+      result[key] = validator(result[key])
+    } else  result[key] = validator
   })
   return result
 }
