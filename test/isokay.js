@@ -110,6 +110,20 @@ test('should trigger error if string can not be converted into a number', assert
       type: 'number'
     }
   }).then(null, err => {
-    assert.equal(err.message, 'foo field can not be converted to a number')
+    assert.equal(err.message, 'field foo can not be converted to a number')
+  })
+})
+
+test('should trigger an error if a required field does not exist', assert => {
+  assert.plan(1)
+  const data = {
+    foo: 'what'
+  }
+  isokay(data, {
+    bar: {
+      required: true
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'field bar is missing')
   })
 })
