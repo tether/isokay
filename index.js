@@ -9,13 +9,15 @@ module.exports = function (data, schema = {}) {
   const result = Object.assign({}, data)
   return new Promise((resolve, reject) => {
     Object.keys(schema).map(key => {
-      const validator = schema[key]
-      const type = typeof validator
+      const value = schema[key]
+      const type = typeof value
       if (type === 'object') {
-
+        Object.keys(value).map(validator => {
+          if (validator === 'type') result[key] = coerce(value[validator], key, result[key])
+        })
       } else if (type === 'function') {
-        result[key] = validator(result[key])
-      } else  result[key] = validator
+        result[key] = value(result[key])
+      } else  result[key] = value
     })
     resolve(result)
   })
@@ -34,6 +36,7 @@ module.exports = function (data, schema = {}) {
  */
 
 function coerce (type, field, value) {
+  console.log(type, field, value)
   let result
   if (type === 'string') result = String(value)
   else if (type === 'number') {
