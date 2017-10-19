@@ -45,6 +45,9 @@ function validate (schema, data, key) {
     if (validator === 'validate') {
       if (!schema[validator](value)) throw new Error(`field ${key} can not be validated`)
     }
+    if (validator === 'transform') {
+      data[key] = schema[validator](value)
+    }
   })
 }
 
