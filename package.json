@@ -1,8 +1,7 @@
-
 {
   "name": "isokay",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Javascript schema validator",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js"
@@ -14,7 +13,7 @@
   "keywords": [
     "tether"
   ],
-  "author": "Petrofeed Inc",
+  "author": "Olivier Wietrich",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tether/isokay/issues"
@@ -24,4 +23,3 @@
     "tape": "*"
   }
 }
-  
