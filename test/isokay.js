@@ -155,6 +155,23 @@ test('should validate value against a function', assert => {
   })
 })
 
+// test('should validate value against a promise returned by a function', assert => {
+//   assert.plan(1)
+//   isokay({
+//     legth: 10
+//   }, {
+//     length: {
+//       validate(val) {
+//         return new Promise((resolve, reject) => {
+//           setTimeout(() => {
+//             resolve(val > 5)
+//           }, 500)
+//         })
+//       }
+//     }
+//   })
+// })
+
 
 test('should transform value with function', assert => {
   assert.plan(2)
