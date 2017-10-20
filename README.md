@@ -1,6 +1,6 @@
 # Isokay
 
-[![Build Status](https://travis-ci.org/tether/isokay.svg?branch=master)](https://travis-ci.org/petrofeed/isokay)
+[![Build Status](https://travis-ci.org/tether/isokay.svg?branch=master)](https://travis-ci.org/tether/isokay)
 [![NPM](https://img.shields.io/npm/v/isokay.svg)](https://www.npmjs.com/package/isokay)
 [![Downloads](https://img.shields.io/npm/dm/isokay.svg)](http://npm-stat.com/charts.html?package=isokay)
 [![guidelines](https://tether.github.io/contribution-guide/badge-guidelines.svg)](https://github.com/tether/contribution-guide)
