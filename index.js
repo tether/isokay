@@ -36,12 +36,12 @@ module.exports = function (data, schema = {}) {
  */
 
 function validate (schema, data, key) {
-  const bool = data[key] == null
+  const value = data[key]
+  const bool = value == null || value === ''
   if (schema['required']) {
     if (bool) throw new Error(`field ${key} is missing`)
   }
   Object.keys(schema).map(validator => {
-    const value = data[key]
     const property = schema[validator]
     if (validator === 'type') {
       if (!bool) data[key] = coerce(property, key, value)

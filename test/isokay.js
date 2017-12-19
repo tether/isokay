@@ -140,6 +140,20 @@ test('should trigger an error if a required field does not exist', assert => {
   })
 })
 
+test('should trigger an errir if a required field is an empty string', assert => {
+  assert.plan(1)
+  const data = {
+    foo: ''
+  }
+  isokay(data, {
+    foo: {
+      required: true
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'field foo is missing')
+  })
+})
+
 
 test('should validate value against a function', assert => {
   assert.plan(2)
