@@ -100,6 +100,18 @@ test('should coerce string to number', assert => {
   })
 })
 
+test('should not coerce string to a number if undefined or null', assert => {
+  assert.plan(1)
+  const data = {}
+  isokay(data, {
+    foo: {
+      type: 'number'
+    }
+  }).then(result => {
+    assert.deepEqual(result, {})
+  })
+})
+
 test('should trigger error if string can not be converted into a number', assert => {
   assert.plan(1)
   const data = {
