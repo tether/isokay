@@ -23,8 +23,10 @@ isokay(data, {
       return 'hello ' + value
     }
   }
+}).then(result => {
+  console.log(result)
+  // => {foo: 'hello bar'}
 })
-// => {foo: 'hello bar'}
 ```
 
 ## Installation
