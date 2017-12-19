@@ -230,3 +230,17 @@ test('should set default value if null or undefined', assert => {
     assert.equal(result.foo, 10)
   })
 })
+
+test('should not call transform if default value is specified and value is null or undefined', assert => {
+  assert.plan(1)
+  isokay({}, {
+    foo: {
+      default: 10,
+      transform() {
+        return 100
+      }
+    }
+  }).then(result => {
+    assert.equal(result.foo, 10)
+  })
+})

@@ -42,18 +42,25 @@ function validate (schema, data, key) {
   }
   Object.keys(schema).map(validator => {
     const value = data[key]
-    if (validator === 'type' && !bool) data[key] = coerce(schema[validator], key, value)
+    const property = schema[validator]
+    if (validator === 'type' && !bool) {
+      data[key] = coerce(property, key, value)
+      return
+    }
     if (validator === 'validate') {
-      if (!schema[validator](value)) throw new Error(`field ${key} can not be validated`)
+      if (!property(value)) throw new Error(`field ${key} can not be validated`)
+      return
     }
     if (validator === 'default' && bool) {
-      data[key] = schema[validator]
+      data[key] = property
+      return
     }
-    if (validator === 'transform') {
-      const cb = schema[validator]
+    if (schema['default'] == null && validator === 'transform') {
+      const cb = property
       data[key] = typeof cb === 'function'
         ? cb(value)
         : cb
+      return
     }
   })
 }
