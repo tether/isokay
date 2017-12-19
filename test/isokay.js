@@ -219,3 +219,14 @@ test('should transform value with primitive', assert => {
     assert.equal(result.foo, 'boop')
   })
 })
+
+test('should set default value if null or undefined', assert => {
+  assert.plan(1)
+  isokay({}, {
+    foo: {
+      default: 10
+    }
+  }).then(result => {
+    assert.equal(result.foo, 10)
+  })
+})

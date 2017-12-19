@@ -46,6 +46,9 @@ function validate (schema, data, key) {
     if (validator === 'validate') {
       if (!schema[validator](value)) throw new Error(`field ${key} can not be validated`)
     }
+    if (validator === 'default' && bool) {
+      data[key] = schema[validator]
+    }
     if (validator === 'transform') {
       const cb = schema[validator]
       data[key] = typeof cb === 'function'
