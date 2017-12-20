@@ -21,7 +21,14 @@ isokay(data, {
     required: true,
     transform(value) {
       return 'hello ' + value
-    }
+    },
+   beep: {
+     type: 'number,
+     default: 10,
+     validate(val) {
+       return val > 5
+     }
+   }
   }
 }).then(result => {
   console.log(result)
