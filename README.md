@@ -23,7 +23,7 @@ isokay(data, {
       return 'hello ' + value
     },
    beep: {
-     type: 'number,
+     type: 'number',
      default: 10,
      validate(val) {
        return val > 5
