@@ -61,7 +61,7 @@ function validate (schema, data, key) {
       if (schema['default'] == null) {
         const cb = property
         data[key] = typeof cb === 'function'
-          ? cb(value)
+          ? (schema['type'] === 'array' ? value.map(cb): cb(value))
           : cb
       }
       return
@@ -87,6 +87,11 @@ function coerce (type, field, value) {
   else if (type === 'number') {
     result = Number(value)
     if (isNaN(result)) throw new Error(`field ${field} can not be converted to a number`)
+  } else if (type === 'array') {
+    result = [].concat(value)
+  } else if (type === 'date') {
+    result = Date.parse(value)
+    if (isNaN(result)) throw new Error(`field ${field} can not be converted into a date`)
   } else if (type === 'boolean') result = Boolean(value)
   return result
 }

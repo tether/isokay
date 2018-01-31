@@ -271,3 +271,60 @@ test('should trim value if type string', assert => {
     assert.equal(result.foo, 'hello')
   })
 })
+
+test('should coerce value into date', assert => {
+  assert.plan(1)
+  var date = new Date()
+  isokay({
+    foo: date
+  }, {
+    foo: {
+      type: 'date'
+    }
+  }).then(result => {
+    assert.deepEqual(result.foo, Date.parse(date))
+  })
+})
+
+test('should coerce single value into array', assert => {
+  assert.plan(1)
+  isokay({
+    foo: 'hello'
+  }, {
+    foo: {
+      type: 'array'
+    }
+  }).then(result => {
+    assert.deepEqual(result.foo, ['hello'])
+  })
+})
+
+test('should not do anything if type array for a value array', assert => {
+  assert.plan(1)
+  isokay({
+    foo: ['hello', 'world']
+  }, {
+    foo: {
+      type: 'array'
+    }
+  }).then(result => {
+    assert.deepEqual(result.foo, ['hello', 'world'])
+  })
+})
+
+
+test('should map every value in an array', assert => {
+  assert.plan(1)
+  isokay({
+    foo: ['hello', 'world']
+  }, {
+    foo: {
+      type: 'array',
+      transform(val) {
+        return val + '!'
+      }
+    }
+  }).then(result => {
+    assert.deepEqual(result.foo, ['hello!', 'world!'])
+  })
+})
