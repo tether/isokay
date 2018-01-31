@@ -41,11 +41,12 @@ function validate (schema, data, key) {
   if (schema['required']) {
     if (bool) throw new Error(`field ${key} is missing`)
   }
-  if (schema['trim']) data[key] = data[key].trim()
   Object.keys(schema).map(validator => {
     const property = schema[validator]
     if (validator === 'type') {
-      if (!bool) data[key] = coerce(property, key, value)
+      if (!bool) {
+        data[key] = coerce(property, key, value)
+      }
       return
     }
     if (validator === 'validate') {
@@ -82,7 +83,7 @@ function validate (schema, data, key) {
 
 function coerce (type, field, value) {
   let result
-  if (type === 'string') result = String(value)
+  if (type === 'string') result = String(value).trim()
   else if (type === 'number') {
     result = Number(value)
     if (isNaN(result)) throw new Error(`field ${field} can not be converted to a number`)
