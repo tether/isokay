@@ -5,7 +5,10 @@
 [![Downloads](https://img.shields.io/npm/dm/isokay.svg)](http://npm-stat.com/charts.html?package=isokay)
 [![guidelines](https://tether.github.io/contribution-guide/badge-guidelines.svg)](https://github.com/tether/contribution-guide)
 
-Javascript schema validator.
+Javascript schema validator. 
+  - **Validation** : Validate an object property against a function. If the function returns false, a verbose error is thrown.
+  - **Transformation** : Map an object property with a function to change its value (similar to Array.prototype.map).
+  - **Coercion** : Coerce an object property into a string, number, boolean, array or date.
 
 ## Usage
 
