@@ -258,3 +258,16 @@ test('should not call transform if default value is specified and value is null 
     assert.equal(result.foo, 10)
   })
 })
+
+test('should trim string if trim flag is true', assert => {
+  assert.plan(1)
+  isokay({
+    foo: 'hello '
+  }, {
+    foo: {
+      trim: true
+    }
+  }).then(result => {
+    assert.equal(result.foo, 'hello')
+  })
+})

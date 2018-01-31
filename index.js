@@ -36,11 +36,12 @@ module.exports = function (data, schema = {}) {
  */
 
 function validate (schema, data, key) {
-  const value = data[key]
+  let value = data[key]
   const bool = value == null || value === ''
   if (schema['required']) {
     if (bool) throw new Error(`field ${key} is missing`)
   }
+  if (schema['trim']) data[key] = data[key].trim()
   Object.keys(schema).map(validator => {
     const property = schema[validator]
     if (validator === 'type') {
