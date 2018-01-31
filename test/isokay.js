@@ -328,3 +328,22 @@ test('should map every value in an array', assert => {
     assert.deepEqual(result.foo, ['hello!', 'world!'])
   })
 })
+
+
+test('should validate each value in an array', assert => {
+  assert.plan(1)
+  isokay({
+    foo: ['hello', 'world']
+  }, {
+    foo: {
+      type: 'array',
+      validate(value) {
+        return value === 'hello'
+      }
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'field foo can not be validated')
+  })
+
+
+})

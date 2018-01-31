@@ -38,37 +38,42 @@ module.exports = function (data, schema = {}) {
 function validate (schema, data, key) {
   let value = data[key]
   const bool = value == null || value === ''
-  if (schema['required']) {
-    if (bool) throw new Error(`field ${key} is missing`)
+  const { required, type, validate, transform } = schema
+  const def = schema['default']
+  // trigger error if undefined but required
+  if (required && bool) throw new Error(`field ${key} is missing`)
+  // coerce to type
+  if (type && !bool)  data[key] = coerce(type, key, value)
+  // validate value
+  if (validate) {
+    const cb = validator(validate, key)
+    if (type === 'array') value.map(cb)
+    else cb(value)
   }
-  Object.keys(schema).map(validator => {
-    const property = schema[validator]
-    if (validator === 'type') {
-      if (!bool) {
-        data[key] = coerce(property, key, value)
-      }
-      return
-    }
-    if (validator === 'validate') {
-      if (!property(value)) throw new Error(`field ${key} can not be validated`)
-      return
-    }
-    if (validator === 'default') {
-      if (bool) data[key] = property
-      return
-    }
-    if (validator === 'transform') {
-      if (schema['default'] == null) {
-        const cb = property
-        data[key] = typeof cb === 'function'
-          ? (schema['type'] === 'array' ? value.map(cb): cb(value))
-          : cb
-      }
-      return
-    }
-  })
+  // apply default value
+  if (def && bool) data[key] = def
+  // apply transform
+  if (transform && def == null) {
+    data[key] = typeof transform === 'function'
+      ? (type === 'array' ? value.map(transform): transform(value))
+      : transform
+  }
 }
 
+/**
+ * Validate a value given a specific function.
+ *
+ * @param {Function} cb
+ * @param {String} key
+ * @return {Function}
+ * @api private
+ */
+
+function validator (cb, key) {
+  return value => {
+    if (!cb(value)) throw new Error(`field ${key} can not be validated`)
+  }
+}
 
 /**
  * Coerce value.
