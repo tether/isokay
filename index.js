@@ -6,22 +6,25 @@
  */
 
 module.exports = function (data, schema = {}) {
-  const result = Object.assign({}, data)
-  return new Promise((resolve, reject) => {
-    Object.keys(schema).map(key => {
-      let value = schema[key]
-      const type = typeof value
-      if (type !== 'object') {
-        value = {
-          transform : value
-        }
-      }
-      validate(value, result, key)
-    })
-    resolve(result)
+  return new Promise(resolve => {
+    resolve(validator(data, schema))
   })
 }
 
+function validator (data, schema) {
+  const result = Object.assign({}, data)
+  Object.keys(schema).map(key => {
+    let value = schema[key]
+    const type = typeof value
+    if (type !== 'object') {
+      value = {
+        transform: value
+      }
+    }
+    validate(value, result, key)
+  })
+  return result
+}
 
 /**
  * Validate data key/value against passed schema.
@@ -38,15 +41,18 @@ module.exports = function (data, schema = {}) {
 function validate (schema, data, key) {
   let value = data[key]
   const bool = value == null || value === ''
-  const { required, type, validate, transform } = schema
+  const { required, type, validate, transform, elements } = schema
   const def = schema['default']
   // trigger error if undefined but required
   if (required && bool) throw new Error(`field ${key} is missing`)
   // coerce to type
-  if (type && !bool)  data[key] = coerce(type, key, value)
+  if (type && !bool) {
+    let before = coerce(type, key, value)
+    data[key] = elements ? before.map(item => validator(item, elements)) : before
+  }
   // validate value
   if (validate) {
-    const cb = validator(validate, key)
+    const cb = check(validate, key)
     if (type === 'array') value.map(cb)
     else cb(value)
   }
@@ -55,7 +61,7 @@ function validate (schema, data, key) {
   // apply transform
   if (transform && def == null) {
     data[key] = typeof transform === 'function'
-      ? (type === 'array' ? value.map(transform): transform(value))
+      ? (type === 'array' ? value.map(transform) : transform(value))
       : transform
   }
 }
@@ -69,7 +75,7 @@ function validate (schema, data, key) {
  * @api private
  */
 
-function validator (cb, key) {
+function check (cb, key) {
   return value => {
     if (!cb(value)) throw new Error(`field ${key} can not be validated`)
   }

@@ -347,3 +347,52 @@ test('should validate each value in an array', assert => {
 
 
 })
+
+test('should define array elements schema', assert => {
+  assert.plan(1)
+  isokay({
+    foo: [{
+      name: 'hello'
+    }]
+  }, {
+    foo: {
+      type: 'array',
+      elements: {
+        name: {
+          required: true
+        },
+        age: {
+          default: 30
+        }
+      }
+    }
+  }).then(result => {
+    assert.deepEqual(result.foo, [{
+      name: 'hello',
+      age: 30
+    }])
+  })
+})
+
+test('should trigger error when array element does not respect schema', assert => {
+  assert.plan(1)
+  isokay({
+    foo: [{
+      age: 40
+    }]
+  }, {
+    foo: {
+      type: 'array',
+      elements: {
+        name: {
+          required: true
+        },
+        age: {
+          default: 30
+        }
+      }
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'field name is missing')
+  })
+})
