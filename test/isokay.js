@@ -396,3 +396,65 @@ test('should trigger error when array element does not respect schema', assert =
     assert.equal(err.message, 'field name is missing')
   })
 })
+
+test('should define object properties', assert => {
+  assert.plan(1)
+  isokay({
+    foo: {
+      name: 'hello'
+    }
+  }, {
+    foo: {
+      type: 'object',
+      elements: {
+        name: {
+          required: true
+        },
+        age: {
+          default: 30
+        }
+      }
+    }
+  }).then(result => {
+    assert.deepEqual(result.foo, {
+      name: 'hello',
+      age: 30
+    })
+  })
+})
+
+test('should trigger an error if field is not an object', assert => {
+  assert.plan(1)
+  isokay({
+    foo: 'name'
+  }, {
+    foo: {
+      type: 'object'
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'field foo is not an object')
+  })
+})
+
+test('should trigger error when object element does not respect schema', assert => {
+  assert.plan(1)
+  isokay({
+    foo: {
+      age: 40
+    }
+  }, {
+    foo: {
+      type: 'array',
+      elements: {
+        name: {
+          required: true
+        },
+        age: {
+          default: 30
+        }
+      }
+    }
+  }).then(null, err => {
+    assert.equal(err.message, 'field name is missing')
+  })
+})

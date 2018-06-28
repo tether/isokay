@@ -1,7 +1,10 @@
 
 /**
- * This is a simple description.
+ * Validate object against schema.
  *
+ * @param {Object} data
+ * @param {Object} schema
+ * @return {Promise}
  * @api public
  */
 
@@ -10,6 +13,15 @@ module.exports = function (data, schema = {}) {
     resolve(validator(data, schema))
   })
 }
+
+/**
+ * Validate object against schema.
+ *
+ * @param {Object} data
+ * @param {Object} schema
+ * @return {Object}
+ * @api public
+ */
 
 function validator (data, schema) {
   const result = Object.assign({}, data)
@@ -48,7 +60,9 @@ function validate (schema, data, key) {
   // coerce to type
   if (type && !bool) {
     let before = coerce(type, key, value)
-    data[key] = elements ? before.map(item => validator(item, elements)) : before
+    data[key] = elements
+      ? (type === 'object' ? validator(before, elements) : before.map(item => validator(item, elements)))
+      : before
   }
   // validate value
   if (validate) {
@@ -94,8 +108,9 @@ function check (cb, key) {
 
 function coerce (type, field, value) {
   let result
-  if (type === 'string') result = String(value).trim()
-  else if (type === 'number') {
+  if (type === 'string') {
+    result = String(value).trim()
+  } else if (type === 'number') {
     result = Number(value)
     if (isNaN(result)) throw new Error(`field ${field} can not be converted to a number`)
   } else if (type === 'array') {
@@ -103,6 +118,11 @@ function coerce (type, field, value) {
   } else if (type === 'date') {
     result = Date.parse(value)
     if (isNaN(result)) throw new Error(`field ${field} can not be converted into a date`)
-  } else if (type === 'boolean') result = Boolean(value)
+  } else if (type === 'boolean') {
+    result = Boolean(value)
+  } else if (type === 'object') {
+    if (typeof value !== 'object') throw new Error(`field ${field} is not an object`)
+    result = value
+  }
   return result
 }
